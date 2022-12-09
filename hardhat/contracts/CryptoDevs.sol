@@ -20,5 +20,21 @@ contract CryptoDevs is ERC721Enumerable, ownable {
     // max number of CryptoDevs
     uint256 public maxTokenIds = 20;
 
+    // total number of tokenIds minted
+    uint256 public tokenIds;
+
+    // Whitelist contract instance
+    IWhitelist whitelist;
+
+    // boolean to keep track of wether presale started or not
+    bool public presaleStarted;
+
+    // timestamp for when presale would end
+    uint256 public presaleEnded;
+
+    modifier onlyWhenNotPaused {
+        require(!_paused, "contract currently paused");
+        _;
+    }
     
 }
