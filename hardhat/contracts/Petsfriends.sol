@@ -5,7 +5,7 @@ import "@openzeppelin-contracts/blob/master/contracts/token/ERC721/extensions/ER
 import "@OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable.sol";
 import "./IWhitelist.sol";
 
-contract CryptoDevs is ERC721Enumerable, ownable {
+contract Petsfriends is ERC721Enumerable, ownable {
     //* @dev _baseTokenURI for computing {tokenURI}. If set, the resulting URI for each
     //* token will be the concatenation of the 'baseURI' and the 'tokenId'.
 
@@ -36,5 +36,26 @@ contract CryptoDevs is ERC721Enumerable, ownable {
         require(!_paused, "contract currently paused");
         _;
     }
-    
+
+    //rajout d'event de Mint, à voir avec le contrat 721
+
+/**Dans le NFT
+
+- Photo de l’animal
+    - possibilité de l’update par la suite
+- Nom*
+- Race*
+- Date de naissance*
+- Propriétaire*
+- Provenance*
+- Ancien propriétaire (hash du précédent NFT)
+- Vaccins
+- Parents :
+    - père*
+    - mère*
+- Numéro de puce*
+- Tatouage*
+- vétérinaire
+- Traitements
+    */
 }
