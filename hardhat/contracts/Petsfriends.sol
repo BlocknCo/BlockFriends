@@ -57,25 +57,5 @@ contract Petsfriends is ERC721Enumerable, ownable {
         require(msg.value >= _price, "Ether sent is not correct");
         _safeMint(msg.sender, tokenIds);
     }   
-//rajout d'event de Mint, à voir avec le contrat 721
 
-/**Dans le NFT
-
-- Photo de l’animal
-    - possibilité de l’update par la suite
-- Nom*
-- Race*
-- Date de naissance*
-- Propriétaire*
-- Provenance*
-- Ancien propriétaire (hash du précédent NFT)
-- Vaccins
-- Parents :
-    - père*
-    - mère*
-- Numéro de puce*
-- Tatouage*
-- vétérinaire
-- Traitements
-    */
 }
