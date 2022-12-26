@@ -32,6 +32,30 @@ contract Petsfriends is ERC721Enumerable, ownable {
     // timestamp pour quand la presale sera terminée
     uint256 public presaleEnded;
 
+    //Structure pets pour les infos de l'animal
+    struct Pets {
+        string name;
+        string race;
+        uint256 birthdate;
+        string father;
+        string mother;
+        uint256 petid;
+    }
+
+    // structure pour le maitre de l'animal
+    struct petOwner {
+        address pet_owner;
+        //on laisse l'addresse ? A débattre
+        string owner_add;
+        uint petOwnerid;
+    }
+
+    Pets[] petsArray;
+    PetOwner[] petownerArray;
+
+    event petRegistered(uint256 petId );
+
+
     modifier onlyWhenNotPaused {
         require(!_paused, "contract currently paused");
         _;
@@ -79,6 +103,28 @@ contract Petsfriends is ERC721Enumerable, ownable {
         uint256 amount = address(this).balance;
         (bool sent, ) = _owner.call{value: amount}("");
         require(sent, "failed to send Ether");
+    }
+
+
+    //fonction pour rentrer les informations de l'animal et faire le lien avec son propriétaire
+    function setPet(string memory _name, string _race, uint256 _birthdate, string _father, string _mother, uint256 _petId) external {
+        require(presaleStarted && block.timestamp < presaleEnded, "Presale is not running");
+        require(whitelist.whitelistedAddresses(msg.sender), "You are not whitelisted");
+        Pets memory pets;
+        pets.name = _name;
+        pets.race = _race;
+        pets.birthdate = _birthdate;
+        pets.father = _father;
+        pets.mother = _mother;
+        pets.petid = _petId;
+        petsArray.push(pets);
+
+        petOwner memory petOwner;
+        petOwner.petOwnerid = _petId;
+        petOwner.petOwnerid = (msg.sender);
+        petownerArray.push(petOwner);
+
+        emit petRegistered(petId);
     }
 
     receive() external payable {}
