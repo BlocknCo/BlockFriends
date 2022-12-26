@@ -6,30 +6,30 @@ import "@OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownabl
 import "./IWhitelist.sol";
 
 contract Petsfriends is ERC721Enumerable, ownable {
+
     //* @dev _baseTokenURI for computing {tokenURI}. If set, the resulting URI for each
     //* token will be the concatenation of the 'baseURI' and the 'tokenId'.
-
     string _baseTokenURI;
 
-    // _price is the price of one Crypto Dev NFT
+    // _price = prix d'un pets friends de base
     uint256 public _price = 0.01 ether;
 
-    // _paused is used to pause the contract in case of an emergency
+    // _paused pour mettre en pause e ncas d'urgence
     bool public _paused;
 
-    // max number of CryptoDevs
+    // max de petsfriends
     uint256 public maxTokenIds = 20;
 
-    // total number of tokenIds minted
+    // Nombre de token mintés
     uint256 public tokenIds;
 
-    // Whitelist contract instance
+    // Contract de la Whitelist 
     IWhitelist whitelist;
 
-    // boolean to keep track of wether presale started or not
+    // boolean pour savoir si la presale est commencée ou non
     bool public presaleStarted;
 
-    // timestamp for when presale would end
+    // timestamp pour quand la presale sera terminée
     uint256 public presaleEnded;
 
     modifier onlyWhenNotPaused {
@@ -37,15 +37,21 @@ contract Petsfriends is ERC721Enumerable, ownable {
         _;
     }
 
+
+    //constructeur pour mettre ne place le nom et le symbole
+    //Nom = Pets friends et symbol = PF
     constructor (string memory baseURI, address whiteListContract) ERC721("Pets Friends", "PF") {
         _baseTokenURI = baseURI;
         whitelist = IWhitelist(whiteListContract);
     } 
 
-
+    //fonction pour démarrer la presale
+    //n'est déclenchable que par le owner
+    //la presale prends fin 5 min après sont départ, possibilité de changer le temps pour en laisser
+    //aux personnes le temps qu'elles rentrent les infos de leur animal de compagnie
     function startPresale() public onlyOwner {
         presaleStarted = true;
-        presaleEnded = block.timestamp + 5 minutes;
+        presaleEnded = block.timestamp + 15 minutes;
     }
 
     function presaleMint() public payable onlyWhenNotPaused {
@@ -57,5 +63,26 @@ contract Petsfriends is ERC721Enumerable, ownable {
         require(msg.value >= _price, "Ether sent is not correct");
         _safeMint(msg.sender, tokenIds);
     }   
+
+    function _baseURI() internal view virtual override returns (string memory){
+        return _baseTokenURI;
+    }
+
+    //mise en pause ou non du contrat par le owner
+    function setPaused(bool val) public onlyOwner {
+        _paused = val;
+    }
+
+    //retrait de la totalité des fonds pour l'envoyer sur le Owner
+    function withdraw() public onlyOwner {
+        address_owner = owner();
+        uint256 amount = address(this).balance;
+        (bool sent, ) = _owner.call{value: amount}("");
+        require(sent, "failed to send Ether");
+    }
+
+    receive() external payable {}
+
+    fallback() external payable {}
 
 }
