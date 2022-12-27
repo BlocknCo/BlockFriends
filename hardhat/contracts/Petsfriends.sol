@@ -108,6 +108,7 @@ contract Petsfriends is ERC721Enumerable, ownable {
 
     //@notice fonction pour rentrer les informations de l'animal et faire le lien avec son propriétaire
     //@dev toutes personnes whitelistée peuvent passer par cette fonction
+    //@dev la presale doit être en place
     //@param _name, _race, _birthdate, _father, _mother, _petId sont les données identifiant l'animal
     //@param l'adresse du créateur de l'animal avec l'id de son animal
     //@dev les informations sont envoyées dans la strcuture pour l'animal et le propriétaire
