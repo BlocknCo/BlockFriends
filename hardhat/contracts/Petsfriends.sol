@@ -43,7 +43,7 @@ contract Petsfriends is ERC721Enumerable, ownable {
     }
 
     // structure pour le maitre de l'animal
-    struct petOwner {
+    struct petOwners {
         address pet_owner;
         //on laisse l'addresse ? A débattre
         string owner_add;
@@ -123,12 +123,12 @@ contract Petsfriends is ERC721Enumerable, ownable {
         pets.petid = _petId;
         petsArray.push(pets);
 
-        petOwner memory petOwner;
-        petOwner.petOwnerid = _petId;
-        petOwner.petOwnerid = (_addr);
+        petOwners memory petOwner;
+        petOwners.petOwnerid = _petId;
+        petOwners.petOwnerid = (_addr);
         petownerArray.push(petOwner);
 
-        emit petRegistered(petId, _addr);
+        emit petRegistered(petId, _addr); 
     }
 
     receive() external payable {}
