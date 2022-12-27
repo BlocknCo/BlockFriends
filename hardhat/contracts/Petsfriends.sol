@@ -53,7 +53,7 @@ contract Petsfriends is ERC721Enumerable, ownable {
     Pets[] petsArray;
     PetOwner[] petownerArray;
 
-    event petRegistered(uint256 petId );
+    event petRegistered(uint256 petId, address  );
 
 
     modifier onlyWhenNotPaused {
@@ -106,8 +106,12 @@ contract Petsfriends is ERC721Enumerable, ownable {
     }
 
 
-    //fonction pour rentrer les informations de l'animal et faire le lien avec son propriétaire
-    function setPet(string memory _name, string _race, uint256 _birthdate, string _father, string _mother, uint256 _petId) external {
+    //@notice fonction pour rentrer les informations de l'animal et faire le lien avec son propriétaire
+    //@dev toutes personnes whitelistée peuvent passer par cette fonction
+    //@param _name, _race, _birthdate, _father, _mother, _petId sont les données identifiant l'animal
+    //@param l'adresse du créateur de l'animal avec l'id de son animal
+    //@dev les informations sont envoyées dans la strcuture pour l'animal et le propriétaire
+    function setPet(string memory _name, string _race, uint256 _birthdate, string _father, string _mother, uint256 _petId , address _addr) external {
         require(presaleStarted && block.timestamp < presaleEnded, "Presale is not running");
         require(whitelist.whitelistedAddresses(msg.sender), "You are not whitelisted");
         Pets memory pets;
@@ -121,10 +125,10 @@ contract Petsfriends is ERC721Enumerable, ownable {
 
         petOwner memory petOwner;
         petOwner.petOwnerid = _petId;
-        petOwner.petOwnerid = (msg.sender);
+        petOwner.petOwnerid = (_addr);
         petownerArray.push(petOwner);
 
-        emit petRegistered(petId);
+        emit petRegistered(petId, _addr);
     }
 
     receive() external payable {}
